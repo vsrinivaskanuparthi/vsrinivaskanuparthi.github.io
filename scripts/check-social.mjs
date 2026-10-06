@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import { readFile, stat } from 'node:fs/promises';
+import { basename } from 'node:path';
+import sharp from 'sharp';
+
+const html = await readFile('dist/index.html', 'utf8');
+const attributes = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(match => [match[1], match[2]]));
+const meta = new Map([...html.matchAll(/<meta\b[^>]*>/g)].map(match => {
+  const attrs = attributes(match[0]);
+  return [attrs.property || attrs.name, attrs.content];
+}));
+const canonical = [...html.matchAll(/<link\b[^>]*>/g)].map(match => attributes(match[0])).find(attrs => attrs.rel === 'canonical')?.href;
+assert(canonical, 'Missing canonical URL');
+const expectedSite = new URL(process.env.SITE_URL || 'https://portfolio.vsrinivas-kanuparthi.workers.dev/');
+assert.equal(canonical.replace(/\/$/, ''), expectedSite.href.replace(/\/$/, ''), 'Canonical does not match deployment URL');
+assert.equal(meta.get('og:url'), canonical, 'Open Graph URL differs from canonical');
+for (const key of ['og:title', 'og:description', 'og:image', 'twitter:image']) assert(meta.get(key), `Missing ${key}`);
+const image = new URL(meta.get('og:image'));
+assert.equal(image.origin, new URL(canonical).origin, 'Preview image must be hosted with the portfolio');
+assert.equal(meta.get('twitter:image'), image.href);
+assert.equal(meta.get('og:image:secure_url'), image.href);
+assert.equal(meta.get('og:image:type'), 'image/png');
+const path = `dist/${basename(image.pathname)}`;
+const info = await sharp(path).metadata();
+assert.equal(info.format, 'png');
+assert.equal(info.width, Number(meta.get('og:image:width')), 'Image width differs from metadata');
+assert.equal(info.height, Number(meta.get('og:image:height')), 'Image height differs from metadata');
+assert.equal(info.width, 1200);
+assert.equal(info.height, 630);
+assert((await stat(path)).size < 5 * 1024 * 1024, 'Preview image exceeds 5 MB');
+assert(!html.includes('<!--app-html-->'), 'Page was not prerendered');
+console.log(`Social preview verified: ${image.href} — ${info.width}×${info.height} PNG.`);

@@ -8,10 +8,12 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/prepare-assets.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir .prerender && node scripts/prerender.mjs",
+    "build": "node scripts/prepare-assets.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir .prerender && node scripts/prerender.mjs && node scripts/check-social.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "test": "playwright test",
-    "package": "npm run build && python3 scripts/package-dist.py"
+    "package": "npm run build && python3 scripts/package-dist.py",
+    "social:preview": "node scripts/generate-social-preview.mjs",
+    "test:social": "node scripts/check-social.mjs"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.3.0",
