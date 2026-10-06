@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Srinivas Kanuparthi',
   email: 'srinivasdharanik@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/srinivas-kanuparthi/',
+  linkedin: 'https://www.linkedin.com/in/srinivaskanuparthi',
   resume: './srinivas-kanuparthi-resume.pdf',
 };
 
