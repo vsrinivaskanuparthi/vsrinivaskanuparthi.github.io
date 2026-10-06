@@ -14,7 +14,7 @@ If connecting the repository to Cloudflare Pages instead:
 - Build output directory: `dist`
 - Node: 22.12+ (the repository selects Node 22)
 
-The canonical and social-sharing URLs use `https://portfolio.vsrinivas-kanuparthi.workers.dev/`. The preview image is a locally hosted 1200×630 PNG, validated during every build. To make a new Cloudflare/custom domain canonical, set `SITE_URL` to its full HTTPS URL when rebuilding, for example:
+The canonical and social-sharing URLs use `https://srinivas-portfolio.pages.dev/`. The preview image is a locally hosted 2400×1260 PNG, validated during every build. To make a new Cloudflare/custom domain canonical, set `SITE_URL` to its full HTTPS URL when rebuilding, for example:
 
 ```sh
 SITE_URL=https://your-portfolio.pages.dev npm run package
@@ -67,8 +67,8 @@ The font files are self-hosted from the Manrope and DM Sans Fontsource packages.
 
 ## LinkedIn sharing preview
 
-After redeploying the updated build, inspect `https://portfolio.vsrinivas-kanuparthi.workers.dev/` with [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/), then add the URL to Featured again. The previous deployment pointed to a GitHub Pages preview image returning HTTP 404.
+After redeploying the updated build, inspect `https://srinivas-portfolio.pages.dev/` with [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/), then add the URL to Featured again. The previous deployment pointed to a GitHub Pages preview image returning HTTP 404.
 
-`npm run social:preview` regenerates `public/portfolio-social-v2.png` from `scripts/social-preview.html` using installed Google Chrome. This command is optional and separate from production builds; the checked-in PNG ships automatically. `npm run test:social` checks the built HTML and actual preview image.
+`npm run social:preview` regenerates `public/portfolio-social-v3.png` from `scripts/social-preview.html` using installed Google Chrome. This command is optional and separate from production builds; the checked-in PNG ships automatically. `npm run test:social` checks the built HTML and actual preview image.
 
-This deployment is on Cloudflare Workers (`workers.dev`). Upload the contents of the rebuilt `dist/` or ZIP to the existing Worker using the deployment method used initially; a new Pages project is not required.
+This deployment is on Cloudflare Pages. Upload the rebuilt `dist/` folder to a new production deployment in the existing `srinivas-portfolio` Pages project.
