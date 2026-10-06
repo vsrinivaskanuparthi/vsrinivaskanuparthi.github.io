@@ -1,0 +1,29 @@
+{
+  "name": "srinivas-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "node scripts/prepare-assets.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir .prerender && node scripts/prerender.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "playwright test",
+    "package": "npm run build && python3 scripts/package-dist.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.3"
+  }
+}
