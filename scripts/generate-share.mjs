@@ -18,7 +18,7 @@ const page = `<!doctype html>
 </head><body><main>
 <img src="${image}" width="2400" height="1260" alt="Srinivas Kanuparthi — Engineer and Builder">
 <h1>Srinivas Kanuparthi</h1>
-<p>Lead Software Engineer at Airbus. Explore my engineering work, Jarvis personal AI assistant, AI Academy and Data Engineering learning platform.</p>
+<p>Lead Software Engineer at Airbus. Explore my engineering work, AI Academy and Data Engineering learning platform.</p>
 <p><a href="${home}">Explore my full portfolio →</a></p>
 </main></body></html>`;
 assert(!/<script\b/i.test(page), 'Share page must work without JavaScript');

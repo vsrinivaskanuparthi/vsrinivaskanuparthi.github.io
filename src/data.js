@@ -8,20 +8,14 @@ export const profile = {
 // Add the data platform URL here when it is deployed; the card updates automatically.
 export const projects = [
   {
-    id: 'jarvis', number: '01', category: 'Personal AI', title: 'JARVIS',
-    description: 'My local voice assistant: wake-word detection, deterministic actions, local AI model routing, and a React HUD that makes the system visible.',
-    tags: ['Python', 'React', 'Ollama', 'WebSockets', 'Voice'],
-    url: null, status: 'local', visual: 'jarvis', linkLabel: 'Explore the Jarvis lab',
-  },
-  {
-    id: 'ai-academy', number: '02', category: 'Artificial intelligence', title: 'AI Academy',
+    id: 'ai-academy', number: '01', category: 'Artificial intelligence', title: 'AI Academy',
     description: 'A learning platform dedicated to artificial intelligence. Built at the intersection of my curiosity about AI and my love of creating useful software.',
     tags: ['Artificial intelligence', 'Learning platform'],
     url: 'https://ai-learning-platform-3fp.pages.dev/',
     visual: 'ai', linkLabel: 'Explore AI Academy',
   },
   {
-    id: 'data-platform', number: '03', category: 'Data engineering', title: 'Data Engineering Learning Platform',
+    id: 'data-platform', number: '02', category: 'Data engineering', title: 'Data Engineering Learning Platform',
     description: 'A dedicated space for learning data engineering. Exploring the systems and ideas behind how data moves, transforms, and becomes useful.',
     tags: ['Data engineering', 'Learning platform'],
     url: null,

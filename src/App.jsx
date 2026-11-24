@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { careers, expertise, profile, projects, work } from './data';
 import Icon from './components/Icon';
 import WorkspaceHero from './components/WorkspaceHero';
-import JarvisLab, { JarvisProjectCard } from './components/JarvisLab';
 import QuickJump from './components/QuickJump';
 import ProjectArt from './components/ProjectArt';
 import CaseStudy from './components/CaseStudy';
 
 const navigation = [['projects', 'Projects'], ['work', 'Impact'], ['about', 'About'], ['experience', 'Journey']];
-const filters = ['All projects', 'Live', 'Local prototype', 'Not yet deployed'];
+const filters = ['All projects', 'Live', 'Not yet deployed'];
 
 function SectionHeading({ number, label, title, description }) {
   return <div className="section-heading"><div><p className="eyebrow"><span>{number}</span> / {label}</p><h2>{title}</h2></div>{description && <p className="section-description">{description}</p>}</div>;
@@ -70,12 +69,12 @@ function Header({ onQuickJump }) {
 
 function Projects() {
   const [filter, setFilter] = useState('All projects');
-  const visible = projects.filter(project => filter === 'All projects' || (filter === 'Live' && !!project.url) || (filter === 'Local prototype' && project.status === 'local') || (filter === 'Not yet deployed' && !project.url && project.status !== 'local'));
+  const visible = projects.filter(project => filter === 'All projects' || (filter === 'Live' && !!project.url) || (filter === 'Not yet deployed' && !project.url));
   return <section className="section projects-section" id="projects" aria-labelledby="projects-title"><div className="container">
     <SectionHeading number="01" label="PERSONAL PROJECTS" title={<>Ideas don’t stay<br/><em>ideas for long.</em></>} description="Beyond the day job. Ideas I’m exploring, platforms I’m building, and things I want to exist."/>
     <div className="project-toolbar"><div className="filter-group js-control" role="group" aria-label="Filter personal projects">{filters.map(name => <button key={name} aria-pressed={filter === name} onClick={() => setFilter(name)}>{name}{name === 'All projects' && <span>{String(projects.length).padStart(2, '0')}</span>}</button>)}</div><span className="project-count" role="status">{visible.length} {visible.length === 1 ? 'PROJECT' : 'PROJECTS'} / INDEPENDENTLY BUILT</span></div>
     <h3 id="projects-title" className="sr-only">Personal projects and learning platforms</h3>
-    <div className="projects-grid">{visible.map(project => project.id === 'jarvis' ? <JarvisProjectCard key={project.id} project={project}/> : <article key={project.id} className={`project-card project-${project.visual}`}><ProjectArt kind={project.visual}/><div className="project-content"><div className="project-meta"><span>{project.category}</span><span className={project.url ? 'project-status live' : 'project-status'}><span className="status-dot"/>{project.url ? 'Live project' : 'Not yet deployed'}</span></div><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><div className="project-card-footer"><span className="project-number">/{project.number}</span>{project.url ? <a href={project.url} target="_blank" rel="noopener noreferrer">{project.linkLabel} <Icon name="northeast"/></a> : <a href={`mailto:${profile.email}?subject=Data%20Engineering%20Learning%20Platform`}>Ask about the platform <Icon name="northeast"/></a>}</div></div></article>)}</div>
+    <div className="projects-grid">{visible.map(project => <article key={project.id} className={`project-card project-${project.visual}`}><ProjectArt kind={project.visual}/><div className="project-content"><div className="project-meta"><span>{project.category}</span><span className={project.url ? 'project-status live' : 'project-status'}><span className="status-dot"/>{project.url ? 'Live project' : 'Not yet deployed'}</span></div><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><div className="project-card-footer"><span className="project-number">/{project.number}</span>{project.url ? <a href={project.url} target="_blank" rel="noopener noreferrer">{project.linkLabel} <Icon name="northeast"/></a> : <a href={`mailto:${profile.email}?subject=Data%20Engineering%20Learning%20Platform`}>Ask about the platform <Icon name="northeast"/></a>}</div></div></article>)}</div>
     <p className="section-footnote"><Icon name="spark"/> Always learning. Always building. Have an idea? <a href="#contact">Let’s compare notes.</a></p>
   </div></section>;
 }
@@ -151,5 +150,5 @@ export default function App() {
     document.querySelectorAll('.section-heading, .featured-work, .about-layout, .toolkit-panel, .contact-panel').forEach(element => observer.observe(element));
     return () => observer.disconnect();
   }, []);
-  return <><a className="skip-link" href="#main">Skip to content</a><Header onQuickJump={() => setJumpOpen(true)}/><main id="main" tabIndex="-1"><WorkspaceHero onQuickJump={() => setJumpOpen(true)}/><Projects/><JarvisLab/><Impact onCaseStudy={() => setCaseOpen(true)}/><About/><Experience/><Contact/></main><footer className="site-footer"><div className="container footer-inner"><a className="footer-brand" href="#top" aria-label="Back to top">sk<span>.</span></a><span>© 2026 Srinivas Kanuparthi<br/><small>Built with curiosity. Engineered with care.</small></span><a className="back-to-top" href="#top">Back to top <Icon name="down"/></a></div></footer><QuickJump open={jumpOpen} onClose={() => setJumpOpen(false)}/><CaseStudy open={caseOpen} onClose={() => setCaseOpen(false)}/></>;
+  return <><a className="skip-link" href="#main">Skip to content</a><Header onQuickJump={() => setJumpOpen(true)}/><main id="main" tabIndex="-1"><WorkspaceHero onQuickJump={() => setJumpOpen(true)}/><Projects/><Impact onCaseStudy={() => setCaseOpen(true)}/><About/><Experience/><Contact/></main><footer className="site-footer"><div className="container footer-inner"><a className="footer-brand" href="#top" aria-label="Back to top">sk<span>.</span></a><span>© 2026 Srinivas Kanuparthi<br/><small>Built with curiosity. Engineered with care.</small></span><a className="back-to-top" href="#top">Back to top <Icon name="down"/></a></div></footer><QuickJump open={jumpOpen} onClose={() => setJumpOpen(false)}/><CaseStudy open={caseOpen} onClose={() => setCaseOpen(false)}/></>;
 }

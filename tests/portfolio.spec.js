@@ -17,7 +17,7 @@ for (const width of [320, 390, 600, 768, 1024, 1440]) {
       await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toHaveAttribute('aria-expanded', 'false');
       await expect(page).toHaveURL(/#projects$/);
     }
-    await expect(page.locator('.project-card')).toHaveCount(3);
+    await expect(page.locator('.project-card')).toHaveCount(2);
     const nodesFit = await page.locator('.constellation-space').evaluate(space => {
       const bounds = space.getBoundingClientRect();
       return [...space.querySelectorAll('.world-node')].every(node => {
@@ -40,7 +40,7 @@ test('project filters and correct deployment links', async ({ page }) => {
   await expect(page.locator('.project-card h3')).toHaveText('Data Engineering Learning Platform');
   await expect(page.locator('.project-status')).toHaveText('Not yet deployed');
   await page.getByRole('button', { name: /All projects/ }).click();
-  await expect(page.locator('.project-card')).toHaveCount(3);
+  await expect(page.locator('.project-card')).toHaveCount(2);
 });
 
 test('technology map and keyboard-operated expertise tabs', async ({ page }) => {
@@ -115,15 +115,16 @@ for (const theme of ['dark', 'light']) {
 
 test('project universe changes its inspector and links', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.world-inspector h3')).toHaveText('JARVIS');
-  await page.getByRole('button', { name: 'Explore AI Academy project' }).click();
   await expect(page.locator('.world-inspector h3')).toHaveText('AI Academy');
   await expect(page.locator('.world-open')).toHaveAttribute('href', 'https://ai-learning-platform-3fp.pages.dev/');
   await page.getByRole('button', { name: 'Explore Data Engineering project' }).click();
+  await expect(page.locator('.world-inspector h3')).toHaveText('Data Engineering');
   await expect(page.locator('.world-status')).toHaveText('NOT YET DEPLOYED');
-  await page.getByRole('button', { name: 'Local prototype', exact: true }).click();
+  await page.getByRole('button', { name: 'Explore AI Academy project' }).click();
+  await expect(page.locator('.world-inspector h3')).toHaveText('AI Academy');
+  await page.getByRole('button', { name: 'Not yet deployed', exact: true }).click();
   await expect(page.locator('.project-card')).toHaveCount(1);
-  await expect(page.locator('.project-card')).toContainText('JARVIS');
+  await expect(page.locator('.project-card')).toContainText('Data Engineering');
 });
 
 test('quick navigation searches, handles keyboard input, and restores focus', async ({ page }) => {
@@ -134,11 +135,11 @@ test('quick navigation searches, handles keyboard input, and restores focus', as
   await expect(search).toBeFocused();
   await search.fill('does-not-exist');
   await expect(page.locator('.jump-empty')).toBeVisible();
-  await search.fill('jarvis');
+  await search.fill('airbus');
   await page.keyboard.press('Enter');
   await expect(page.getByRole('dialog')).not.toBeVisible();
-  await expect(page).toHaveURL(/#jarvis$/);
-  await expect(page.locator('#jarvis')).toBeFocused();
+  await expect(page).toHaveURL(/#work$/);
+  await expect(page.locator('#work')).toBeFocused();
   await opener.click();
   await page.keyboard.press('Escape');
   await expect(opener).toBeFocused();
@@ -146,36 +147,3 @@ test('quick navigation searches, handles keyboard input, and restores focus', as
   await expect(page.getByRole('dialog', { name: 'Where would you like to go?' })).toBeVisible();
 });
 
-test('Jarvis walkthrough plays, pauses, resets, and changes routing without a backend', async ({ page }) => {
-  const sockets = [];
-  page.on('websocket', socket => sockets.push(socket.url()));
-  await page.clock.install();
-  await page.goto('/');
-  await expect(page.locator('.lab-demo-label')).toContainText('No microphone, model, or device actions');
-  await page.getByRole('button', { name: 'Play walkthrough', exact: true }).click();
-  await page.clock.runFor(2500);
-  await expect(page.locator('.lab-step-copy h3')).toHaveText('“Open Calculator.”');
-  await page.getByRole('button', { name: 'Pause walkthrough' }).click();
-  await page.clock.runFor(5000);
-  await expect(page.locator('.lab-step-copy h3')).toHaveText('“Open Calculator.”');
-  await page.getByRole('button', { name: 'Step 4: Act' }).click();
-  await expect(page.locator('.reactor-center-copy strong')).toHaveText('EXECUTING');
-  await page.getByRole('button', { name: 'Reset walkthrough' }).click();
-  await expect(page.locator('.lab-step-copy h3')).toHaveText('“Wake up Jarvis.”');
-  await page.getByRole('button', { name: /What is Node.js\?/ }).click();
-  await page.getByRole('button', { name: 'Step 3: Route' }).click();
-  await expect(page.locator('.lab-event')).toContainText('Fast Brain');
-  expect(sockets).toEqual([]);
-});
-
-test('actual Jarvis HUD opens accessibly and loads the real capture', async ({ page }) => {
-  await page.goto('/');
-  const opener = page.getByRole('button', { name: 'View the actual HUD' });
-  await opener.click();
-  await expect(page.getByRole('dialog', { name: 'The actual Jarvis HUD' })).toBeVisible();
-  expect(await page.locator('.hud-dialog > img').evaluate(img => img.complete && img.naturalWidth === 1728)).toBeTruthy();
-  const result = await new AxeBuilder({ page }).include('.hud-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
-  expect(result.violations).toEqual([]);
-  await page.keyboard.press('Escape');
-  await expect(opener).toBeFocused();
-});
